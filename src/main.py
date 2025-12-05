@@ -1,0 +1,141 @@
+import flet as ft
+import roots
+import linear
+import interpolasi
+import integral
+import regression
+import differentiation
+
+class KOMNUMApp:
+    __roots_page = ft.Container(content=
+        ft.Column(
+            [
+                ft.TextField(label="f(x)="),
+                ft.TextField(label="start"),
+                ft.TextField(label="end"),
+                ft.Dropdown(
+                    options=[
+                        ft.DropdownOption(key="Bisection"),
+                        ft.DropdownOption(key="Regula-falsi"),
+                        ft.DropdownOption(key="Newton-raphson"),
+                        ft.DropdownOption(key="Secant")
+                    ]
+                ),
+                ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+            ]
+        ),
+        alignment=ft.alignment.center
+    )
+
+    __linear_page = ft.Container(content=
+        ft.Text("test2"),
+        alignment=ft.alignment.center
+    )
+
+    __interpolasi_page = ft.Container(content=
+        ft.Text("test3"),
+        alignment=ft.alignment.center
+    )
+
+    __integral_page = ft.Container(content=
+        ft.Column(
+            [
+                ft.TextField(label="f(x)="),
+                ft.ResponsiveRow(
+                    [
+                        ft.TextField(col={"sm":3},label="a="),
+                        ft.TextField(col={"sm":3},label="b="),
+                        ft.TextField(col={"sm":3},label="n=")
+                    ],
+                ),
+                ft.Dropdown(
+                    options=[
+                        ft.DropdownOption(key="Trapezoid"),
+                        ft.DropdownOption(key="Simpson 1/3"),
+                        ft.DropdownOption(key="Simpson 3/8"),
+                    ]
+                ),
+                ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+            ],
+            expand=1
+        ),
+        alignment=ft.alignment.center
+    )
+
+    __regresi_page =  ft.Container(content=
+        ft.Column(
+            [
+                ft.TextField(label="x="),
+                ft.TextField(label="y="),
+                ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+            ],
+            expand=1
+        ),
+        alignment=ft.alignment.center
+    )
+
+    __differential_page = ft.Container(content=
+        ft.Column(
+            [
+                ft.TextField(label="f(x,y)="),
+                ft.ResponsiveRow(
+                    [
+                        ft.TextField(col={"sm":3},label="x0="),
+                        ft.TextField(col={"sm":3},label="y0="),
+                        ft.TextField(col={"sm":3},label="b="),
+                        ft.TextField(col={"sm":3},label="h=")
+                    ],
+                ),
+                ft.Dropdown(
+                    options=[
+                        ft.DropdownOption(key="Euler"),
+                        ft.DropdownOption(key="Heun"),
+                    ]
+                ),
+                ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+            ],
+            expand=1
+        ),
+        alignment=ft.alignment.center
+    )
+
+    def __init__(self,page:ft.Page):
+        self.page = page
+        self.page.title = "Tugas Rancang Komputasi Numerik"
+        self.page.theme_mode = ft.ThemeMode.LIGHT
+        self.page.window.resizable = True
+        self.create_ui_components()
+
+        self.page.update()
+        pass
+
+    def create_ui_components(self):
+        title = ft.Column(
+            controls=[
+                ft.Text("Tugas Rancang Komnum",theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM),
+                ft.Text("Daya Sjahpoetro 622022003",theme_style=ft.TextThemeStyle.TITLE_SMALL)
+            ]
+        )
+        tabs =ft.Tabs(
+            selected_index = 0,
+            animation_duration = 300,
+            tabs=[
+                ft.Tab(text = "Roots", content = self.__roots_page),
+                ft.Tab(text = "Persamaan Linear",content = self.__linear_page),
+                ft.Tab(text = "Interpolasi",content = self.__interpolasi_page),
+                ft.Tab(text = "Integral",content = self.__integral_page),
+                ft.Tab(text = "Regresi",content= self.__regresi_page),
+                ft.Tab(text = "Persamaan Differensial",content=self.__differential_page)
+            ],
+            expand = 1,
+        )
+        self.page.add(title)
+        self.page.add(tabs)
+        pass
+
+
+def main(page: ft.Page):
+    app = KOMNUMApp(page)
+
+if __name__=="__main__":
+    ft.app(target=main)
