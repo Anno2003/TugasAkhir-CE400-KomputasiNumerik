@@ -1,3 +1,5 @@
+import numpy as np
+
 def linear_regression(x,y):
     n=len(x)
     s_x = np.sum(x)

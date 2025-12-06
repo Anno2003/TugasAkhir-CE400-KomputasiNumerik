@@ -1,6 +1,7 @@
 import flet as ft
 import matplotlib.pyplot as plt
 from flet.matplotlib_chart import MatplotlibChart
+import numpy as np
 
 import roots
 import linear
@@ -72,12 +73,32 @@ class KOMNUMApp:
         )
 
     def __regresi_page(self):
+        x = ft.TextField(label="x=")
+        y = ft.TextField(label="y=")
+        fig,ax = plt.subplots()
+        
+        def calc(e):
+            _x=[float(i.strip())for i in x.value.split(',')]
+            _y=[float(i.strip())for i in y.value.split(',')]
+            a,b=regression.linear_regression(_x,_y)
+            f = lambda x: a+b*x
+            
+            _x
+            Y= [f(i) for i in _x]
+            ax.clear()
+            ax.set_title(f"f(x)={round(a,4)}+{round(b,4)}x")
+            ax.scatter(_x,_y,color='red')
+            ax.plot(_x,Y)
+            self.page.update()
+            
         return ft.Container(content=
             ft.Column(
                 [
-                    ft.TextField(label="x="),
-                    ft.TextField(label="y="),
-                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                    ft.Text("x dan y dalam comma separated values 1,2,3,..."),
+                    x,
+                    y,
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK,on_click=calc),
+                    MatplotlibChart(fig,expand=1)
                 ],
                 expand=1
             ),
