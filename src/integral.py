@@ -28,4 +28,27 @@ def simpson_one_third(f,a,b,n):
     I=(I+sigma)*h/3
     return I
 
-# TODO: SIMPSON 3/8
+def simpson_three_eight(f, a, b, n):
+    # n must be a multiple of 3
+    if n % 3 != 0:
+        fixed_n = n + (3 - (n % 3))
+        print(f'upahselang (n) harus kelipatan 3! dibulatkan dari {n} menjadi {fixed_n}')
+        n = fixed_n
+
+    h = (b - a) / n
+    I = f(a) + f(b)
+    sigma = 0
+    x = a
+
+    for r in range(1, n):
+        x += h
+        # Coefficients for 3/8 rule:
+        # r % 3 == 0 → coefficient 2
+        # otherwise → coefficient 3
+        if r % 3 == 0:
+            sigma += 2 * f(x)
+        else:
+            sigma += 3 * f(x)
+
+    I = (I + sigma) * (3 * h) / 8
+    return I

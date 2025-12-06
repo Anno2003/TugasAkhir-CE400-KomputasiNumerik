@@ -90,7 +90,7 @@ class KOMNUMApp:
             if(not conv):
                 ax.set_title("Tidak Konvergen")
             else:
-                ax.set_title(c)
+                ax.set_title(f"akar = {c}")
             ax.plot(X,Y)
             ax.scatter(c,_f(c),color='red')
             self.page.update()
@@ -124,27 +124,54 @@ class KOMNUMApp:
         )
 
     def __integral_page(self):
-        fig,ax = plt.subplots()
+        fx = ft.TextField(label="f(x)=")
+        a = ft.TextField(col={"sm":3},label="a=")
+        b = ft.TextField(col={"sm":3},label="b=")
+        n = ft.TextField(col={"sm":3},label="n=")
+        dropdown = ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="Trapezoid"),
+                ft.DropdownOption(key="Simpson 1/3"),
+                ft.DropdownOption(key="Simpson 3/8"),
+            ]
+        )
+        result = ft.Text("f'(x)=",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
+        
+        def calc(e):
+            _a = float(a.value.strip())
+            _b = float(b.value.strip())
+            _n = int(n.value.strip())
+            _f = self.make_function(fx.value.strip())
+            
+            match(dropdown.value):
+                case "Trapezoid":
+                    I = integral.trapezoidal_rule(_f,_a,_b,_n)
+                    pass
+                case "Simpson 1/3":
+                    I = integral.simpson_one_third(_f,_a,_b,_n)
+                    pass
+                case "Simpson 3/8":
+                    I = integral.simpson_three_eight(_f,_a,_b,_n)
+                    pass
+            
+            result.value = f"f'(x) = {I}"
+            self.page.update()
+            pass
+        
         return ft.Container(content=
             ft.Column(
                 [
-                    ft.TextField(label="f(x)="),
+                    fx,
                     ft.ResponsiveRow(
                         [
-                            ft.TextField(col={"sm":3},label="a="),
-                            ft.TextField(col={"sm":3},label="b="),
-                            ft.TextField(col={"sm":3},label="n=")
+                            a,
+                            b,
+                            n
                         ],
                     ),
-                    ft.Dropdown(
-                        options=[
-                            ft.DropdownOption(key="Trapezoid"),
-                            ft.DropdownOption(key="Simpson 1/3"),
-                            ft.DropdownOption(key="Simpson 3/8"),
-                        ]
-                    ),
-                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
-                    MatplotlibChart(fig,expand=1)
+                    dropdown,
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK,on_click=calc),
+                    result,
                 ],
                 expand=1
             ),
