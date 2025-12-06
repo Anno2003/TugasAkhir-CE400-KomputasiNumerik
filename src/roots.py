@@ -54,8 +54,8 @@ def regula_falsi_gacor (f,a,b,tol=1e-7,max_iter=1000):
                 if mandek_kanan>1:
                     FB=FB/2
         if abs(a-b)<tol:
-            return c,i,True,iters
-    return c,i,False,iters
+            return c,i,True#,iters
+    return c,i,False#,iters
 
 def newton_raphson(f,df,x0,tol=0.0001,max_iter=10000):
     x_sebelumnya= 0

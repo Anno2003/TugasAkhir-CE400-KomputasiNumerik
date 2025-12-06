@@ -15,23 +15,96 @@ matplotlib.use('agg')
 plt.rcParams["axes.grid"] = True # supaya defaultnya ada grid
 
 class KOMNUMApp:
+    
+    # allowed names from numpy
+    safe_np = {
+        "np.sin": np.sin,
+        "np.cos": np.cos,
+        "np.tan": np.tan,
+        "np.exp": np.exp,
+        "np.log": np.log,
+        "np.sqrt": np.sqrt,
+        "np.abs": np.abs,
+        "np.pi": np.pi,
+        "np.e": np.e,
+    }
+    
+    SAFE_GLOBALS = {
+        "__builtins__": None,  # disable all builtins
+        **safe_np,
+        "np":np,
+    }
+    
+    def make_function(self,expr: str):
+        """Returns a callable f(x) from a user expression using math + numpy."""
+        def f(x):
+            # each call overrides x
+            return eval(expr, self.SAFE_GLOBALS, {"x": x})
+        return f
+        
     def __roots_page(self):
         fig,ax = plt.subplots()
+        fx = ft.TextField(label="f(x)=")
+        start = ft.TextField(label="a atau x0")
+        end = ft.TextField(label="b atau x1 atau df")
+        dropdown = ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="Bisection"),
+                ft.DropdownOption(key="Regula-falsi"),
+                ft.DropdownOption(key="Newton-raphson"),
+                ft.DropdownOption(key="Secant")
+            ]
+        )
+        
+        def calc(e):
+            _f=self.make_function(fx.value.strip())
+            a = float(start.value.strip())
+            
+            if (dropdown.value == "Newton-raphson"):
+                b = self.make_function(end.value.strip())
+            else:
+                b = float(end.value.strip())
+
+            match (dropdown.value):
+                case "Bisection":
+                    c,_,conv = roots.bisection(_f,a,b) 
+                    pass
+                case "Regula-falsi":
+                    c,_,conv = roots.regula_falsi_gacor(_f,a,b) 
+                    pass
+                case "Newton-raphson":
+                    c,_,conv = roots.newton_raphson(_f,b,a) 
+                    pass
+                case "Secant":
+                    c,_,conv = roots.secant(_f,a,b) 
+                    pass
+            
+            if (dropdown.value == "Newton-raphson"):
+                X = np.linspace(a-3,c+3,100)
+            else:
+                X = np.linspace(a,b,100)
+            
+            Y = _f(X)
+            
+            ax.clear()
+            if(not conv):
+                ax.set_title("Tidak Konvergen")
+            else:
+                ax.set_title(c)
+            ax.plot(X,Y)
+            ax.scatter(c,_f(c),color='red')
+            self.page.update()
+            pass
+        
         return ft.Container(content=
             ft.Column(
                 [
-                    ft.TextField(label="f(x)="),
-                    ft.TextField(label="start"),
-                    ft.TextField(label="end"),
-                    ft.Dropdown(
-                        options=[
-                            ft.DropdownOption(key="Bisection"),
-                            ft.DropdownOption(key="Regula-falsi"),
-                            ft.DropdownOption(key="Newton-raphson"),
-                            ft.DropdownOption(key="Secant")
-                        ]
-                    ),
-                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                    ft.Text("input f(x) support numpy contoh: np.sin(x)+2\nuntuk newton raphson df merupakan turunan pertama dari f(x)"),
+                    fx,
+                    start,
+                    end,
+                    dropdown,
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK,on_click=calc),
                     MatplotlibChart(fig,expand=1)
                 ]
             ),
