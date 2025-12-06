@@ -1,4 +1,5 @@
 import flet as ft
+import matplotlib
 import matplotlib.pyplot as plt
 from flet.matplotlib_chart import MatplotlibChart
 import numpy as np
@@ -10,10 +11,12 @@ import integral
 import regression
 import differentiation
 
+matplotlib.use('agg')
 plt.rcParams["axes.grid"] = True # supaya defaultnya ada grid
 
 class KOMNUMApp:
     def __roots_page(self):
+        fig,ax = plt.subplots()
         return ft.Container(content=
             ft.Column(
                 [
@@ -28,7 +31,8 @@ class KOMNUMApp:
                             ft.DropdownOption(key="Secant")
                         ]
                     ),
-                    ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                    MatplotlibChart(fig,expand=1)
                 ]
             ),
             alignment=ft.alignment.center
@@ -47,6 +51,7 @@ class KOMNUMApp:
         )
 
     def __integral_page(self):
+        fig,ax = plt.subplots()
         return ft.Container(content=
             ft.Column(
                 [
@@ -65,7 +70,8 @@ class KOMNUMApp:
                             ft.DropdownOption(key="Simpson 3/8"),
                         ]
                     ),
-                    ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                    MatplotlibChart(fig,expand=1)
                 ],
                 expand=1
             ),
@@ -106,6 +112,7 @@ class KOMNUMApp:
         )
 
     def __differential_page(self):
+        fig,ax = plt.subplots()
         return ft.Container(content=
             ft.Column(
                 [
@@ -124,7 +131,8 @@ class KOMNUMApp:
                             ft.DropdownOption(key="Heun"),
                         ]
                     ),
-                    ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                    MatplotlibChart(fig,expand=1)
                 ],
                 expand=1
             ),
