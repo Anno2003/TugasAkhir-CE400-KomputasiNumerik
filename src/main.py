@@ -1,4 +1,7 @@
 import flet as ft
+import matplotlib.pyplot as plt
+from flet.matplotlib_chart import MatplotlibChart
+
 import roots
 import linear
 import interpolasi
@@ -6,98 +9,106 @@ import integral
 import regression
 import differentiation
 
+plt.rcParams["axes.grid"] = True # supaya defaultnya ada grid
+
 class KOMNUMApp:
-    __roots_page = ft.Container(content=
-        ft.Column(
-            [
-                ft.TextField(label="f(x)="),
-                ft.TextField(label="start"),
-                ft.TextField(label="end"),
-                ft.Dropdown(
-                    options=[
-                        ft.DropdownOption(key="Bisection"),
-                        ft.DropdownOption(key="Regula-falsi"),
-                        ft.DropdownOption(key="Newton-raphson"),
-                        ft.DropdownOption(key="Secant")
-                    ]
-                ),
-                ft.FilledButton("Submit",icon=ft.Icons.CHECK)
-            ]
-        ),
-        alignment=ft.alignment.center
-    )
+    def __roots_page(self):
+        return ft.Container(content=
+            ft.Column(
+                [
+                    ft.TextField(label="f(x)="),
+                    ft.TextField(label="start"),
+                    ft.TextField(label="end"),
+                    ft.Dropdown(
+                        options=[
+                            ft.DropdownOption(key="Bisection"),
+                            ft.DropdownOption(key="Regula-falsi"),
+                            ft.DropdownOption(key="Newton-raphson"),
+                            ft.DropdownOption(key="Secant")
+                        ]
+                    ),
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+                ]
+            ),
+            alignment=ft.alignment.center
+        )
 
-    __linear_page = ft.Container(content=
-        ft.Text("test2"),
-        alignment=ft.alignment.center
-    )
+    def __linear_page(self): 
+        return ft.Container(content=
+            ft.Text("test2"),
+            alignment=ft.alignment.center
+        )
 
-    __interpolasi_page = ft.Container(content=
-        ft.Text("test3"),
-        alignment=ft.alignment.center
-    )
+    def __interpolasi_page(self):
+        return ft.Container(content=
+            ft.Text("test3"),
+            alignment=ft.alignment.center
+        )
 
-    __integral_page = ft.Container(content=
-        ft.Column(
-            [
-                ft.TextField(label="f(x)="),
-                ft.ResponsiveRow(
-                    [
-                        ft.TextField(col={"sm":3},label="a="),
-                        ft.TextField(col={"sm":3},label="b="),
-                        ft.TextField(col={"sm":3},label="n=")
-                    ],
-                ),
-                ft.Dropdown(
-                    options=[
-                        ft.DropdownOption(key="Trapezoid"),
-                        ft.DropdownOption(key="Simpson 1/3"),
-                        ft.DropdownOption(key="Simpson 3/8"),
-                    ]
-                ),
-                ft.FilledButton("Submit",icon=ft.Icons.CHECK)
-            ],
-            expand=1
-        ),
-        alignment=ft.alignment.center
-    )
+    def __integral_page(self):
+        return ft.Container(content=
+            ft.Column(
+                [
+                    ft.TextField(label="f(x)="),
+                    ft.ResponsiveRow(
+                        [
+                            ft.TextField(col={"sm":3},label="a="),
+                            ft.TextField(col={"sm":3},label="b="),
+                            ft.TextField(col={"sm":3},label="n=")
+                        ],
+                    ),
+                    ft.Dropdown(
+                        options=[
+                            ft.DropdownOption(key="Trapezoid"),
+                            ft.DropdownOption(key="Simpson 1/3"),
+                            ft.DropdownOption(key="Simpson 3/8"),
+                        ]
+                    ),
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+                ],
+                expand=1
+            ),
+            alignment=ft.alignment.center
+        )
 
-    __regresi_page =  ft.Container(content=
-        ft.Column(
-            [
-                ft.TextField(label="x="),
-                ft.TextField(label="y="),
-                ft.FilledButton("Submit",icon=ft.Icons.CHECK),
-            ],
-            expand=1
-        ),
-        alignment=ft.alignment.center
-    )
+    def __regresi_page(self):
+        return ft.Container(content=
+            ft.Column(
+                [
+                    ft.TextField(label="x="),
+                    ft.TextField(label="y="),
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                ],
+                expand=1
+            ),
+            alignment=ft.alignment.center
+        )
 
-    __differential_page = ft.Container(content=
-        ft.Column(
-            [
-                ft.TextField(label="f(x,y)="),
-                ft.ResponsiveRow(
-                    [
-                        ft.TextField(col={"sm":3},label="x0="),
-                        ft.TextField(col={"sm":3},label="y0="),
-                        ft.TextField(col={"sm":3},label="b="),
-                        ft.TextField(col={"sm":3},label="h=")
-                    ],
-                ),
-                ft.Dropdown(
-                    options=[
-                        ft.DropdownOption(key="Euler"),
-                        ft.DropdownOption(key="Heun"),
-                    ]
-                ),
-                ft.FilledButton("Submit",icon=ft.Icons.CHECK)
-            ],
-            expand=1
-        ),
-        alignment=ft.alignment.center
-    )
+    def __differential_page(self):
+        return ft.Container(content=
+            ft.Column(
+                [
+                    ft.TextField(label="f(x,y)="),
+                    ft.ResponsiveRow(
+                        [
+                            ft.TextField(col={"sm":3},label="x0="),
+                            ft.TextField(col={"sm":3},label="y0="),
+                            ft.TextField(col={"sm":3},label="b="),
+                            ft.TextField(col={"sm":3},label="h=")
+                        ],
+                    ),
+                    ft.Dropdown(
+                        options=[
+                            ft.DropdownOption(key="Euler"),
+                            ft.DropdownOption(key="Heun"),
+                        ]
+                    ),
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK)
+                ],
+                expand=1
+            ),
+            alignment=ft.alignment.center
+        )
 
     def __init__(self,page:ft.Page):
         self.page = page
@@ -120,12 +131,12 @@ class KOMNUMApp:
             selected_index = 0,
             animation_duration = 300,
             tabs=[
-                ft.Tab(text = "Roots", content = self.__roots_page),
-                ft.Tab(text = "Persamaan Linear",content = self.__linear_page),
-                ft.Tab(text = "Interpolasi",content = self.__interpolasi_page),
-                ft.Tab(text = "Integral",content = self.__integral_page),
-                ft.Tab(text = "Regresi",content= self.__regresi_page),
-                ft.Tab(text = "Persamaan Differensial",content=self.__differential_page)
+                ft.Tab(text = "Roots", content = self.__roots_page()),
+                ft.Tab(text = "Persamaan Linear",content = self.__linear_page()),
+                ft.Tab(text = "Interpolasi",content = self.__interpolasi_page()),
+                ft.Tab(text = "Integral",content = self.__integral_page()),
+                ft.Tab(text = "Regresi",content= self.__regresi_page()),
+                ft.Tab(text = "Persamaan Differensial",content=self.__differential_page())
             ],
             expand = 1,
         )
