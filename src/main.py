@@ -35,11 +35,16 @@ class KOMNUMApp:
         "np":np,
     }
     
-    def make_function(self,expr: str):
+    def make_function(self,expr: str,xy=False):
         """Returns a callable f(x) from a user expression using math + numpy."""
-        def f(x):
-            # each call overrides x
-            return eval(expr, self.SAFE_GLOBALS, {"x": x})
+        if(xy):
+            def f(x,y):
+                # each call overrides x
+                return eval(expr, self.SAFE_GLOBALS, {"x": x,"y":y})
+        else:
+            def f(x):
+                # each call overrides x
+                return eval(expr, self.SAFE_GLOBALS, {"x": x})
         return f
         
     def __roots_page(self):
@@ -178,7 +183,7 @@ class KOMNUMApp:
                     I = integral.simpson_three_eight(_f,_a,_b,_n)
                     pass
             
-            result.value = f"f'(x) = {I}"
+            result.value = f"Area Under Curve = {I}"
             self.page.update()
             pass
         
@@ -236,27 +241,48 @@ class KOMNUMApp:
         )
 
     def __differential_page(self):
+        fx = ft.TextField(label="f(x,y)=")
+        x0 = ft.TextField(col={"sm":3},label="x0=")
+        y0 = ft.TextField(col={"sm":3},label="y0=")
+        b  = ft.TextField(col={"sm":3},label="b=")
+        h  = ft.TextField(col={"sm":3},label="h=")
+        dropdown = ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="Euler"),
+                ft.DropdownOption(key="Heun"),
+            ]
+        )
+        result   = ft.Text("Hasil=",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
         
-        result = ft.Text("Hasil=",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
+        def calc(e):
+            _f  = self.make_function(fx.value.strip(),xy=True)
+            _x0 = float(x0.value.strip())
+            _y0 = float(y0.value.strip())
+            _b  = float(b.value.strip())
+            _h  = float(h.value.strip())
+            
+            match(dropdown.value):
+                case "Euler":
+                    Y = differentiation.euler_method(_f,_x0,_y0,_b,_h)
+                case "Heun":
+                    Y = differentiation.heun_method(_f,_x0,_y0,_b,_h)
+            result.value = f"Hasil = {Y}"
+            self.page.update()
+        
         return ft.Container(content=
             ft.Column(
                 [
-                    ft.TextField(label="f(x,y)="),
+                    fx,
                     ft.ResponsiveRow(
                         [
-                            ft.TextField(col={"sm":3},label="x0="),
-                            ft.TextField(col={"sm":3},label="y0="),
-                            ft.TextField(col={"sm":3},label="b="),
-                            ft.TextField(col={"sm":3},label="h=")
+                            x0,
+                            y0,
+                            b,
+                            h
                         ],
                     ),
-                    ft.Dropdown(
-                        options=[
-                            ft.DropdownOption(key="Euler"),
-                            ft.DropdownOption(key="Heun"),
-                        ]
-                    ),
-                    ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                    dropdown,
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK,on_click=calc),
                     result,
                 ],
                 expand=1
