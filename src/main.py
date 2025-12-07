@@ -118,8 +118,32 @@ class KOMNUMApp:
         )
 
     def __interpolasi_page(self):
+        x = ft.TextField(label="x=")
+        y = ft.TextField(label="y=")
+        fig,ax = plt.subplots()
+        
+        def calc(e):
+            _x=[float(i.strip())for i in x.value.split(',')]
+            _y=[float(i.strip())for i in y.value.split(',')]
+            f = interpolasi.lagrange_polynomial(_x,_y)
+            X = np.linspace(_x[0],_x[-1],100)
+            Y = [f(i) for i in X]
+            ax.clear() 
+            ax.scatter(_x,_y,color='red')
+            ax.plot(X,Y)
+            self.page.update()
+            
         return ft.Container(content=
-            ft.Text("test3"),
+            ft.Column(
+                [
+                    ft.Text("x dan y dalam comma separated values 1,2,3,..."),
+                    x,
+                    y,
+                    ft.FilledButton("Submit",icon=ft.Icons.CHECK,on_click=calc),
+                    MatplotlibChart(fig,expand=1)
+                ],
+                expand=1
+            ),
             alignment=ft.alignment.center
         )
 
@@ -212,6 +236,8 @@ class KOMNUMApp:
         )
 
     def __differential_page(self):
+        
+        result = ft.Text("Hasil=",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
         return ft.Container(content=
             ft.Column(
                 [
@@ -231,6 +257,7 @@ class KOMNUMApp:
                         ]
                     ),
                     ft.FilledButton("Submit",icon=ft.Icons.CHECK),
+                    result,
                 ],
                 expand=1
             ),
