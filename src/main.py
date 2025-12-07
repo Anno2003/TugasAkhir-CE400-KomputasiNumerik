@@ -212,7 +212,6 @@ class KOMNUMApp:
         )
 
     def __differential_page(self):
-        fig,ax = plt.subplots()
         return ft.Container(content=
             ft.Column(
                 [
@@ -232,7 +231,6 @@ class KOMNUMApp:
                         ]
                     ),
                     ft.FilledButton("Submit",icon=ft.Icons.CHECK),
-                    MatplotlibChart(fig,expand=1)
                 ],
                 expand=1
             ),
