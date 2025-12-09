@@ -64,16 +64,17 @@ class KOMNUMApp:
     def __roots_page(self):
         
         fig,ax = plt.subplots()
-        fx = ft.TextField(label="f(x)=")
-        start = ft.TextField(label="a atau x0")
-        end = ft.TextField(label="b atau x1 atau df")
+        fx = ft.TextField(label="f(x)=",value="x**2-4")
+        start = ft.TextField(label="a atau x0",value="0")
+        end = ft.TextField(label="b atau x1 atau df",value="3")
         dropdown = ft.Dropdown(
             options=[
                 ft.DropdownOption(key="Bisection"),
                 ft.DropdownOption(key="Regula-falsi"),
                 ft.DropdownOption(key="Newton-raphson"),
                 ft.DropdownOption(key="Secant")
-            ]
+            ],
+            value="Bisection"
         )
         
         def calc(e):
@@ -147,7 +148,8 @@ class KOMNUMApp:
             options=[
                 ft.DropdownOption(key="Gauss-jordan"),
                 ft.DropdownOption(key="Gauss-seidel"),
-            ]
+            ],
+            value="Gauss-jordan"
         )
         result=ft.Text("",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
         
@@ -197,8 +199,8 @@ class KOMNUMApp:
         )
 
     def __interpolasi_page(self):
-        x = ft.TextField(label="x=")
-        y = ft.TextField(label="y=")
+        x = ft.TextField(label="x=",value="1,2,5")
+        y = ft.TextField(label="y=",value="3,5,0")
         fig,ax = plt.subplots()
         
         def calc(e):
@@ -231,18 +233,19 @@ class KOMNUMApp:
         )
 
     def __integral_page(self):
-        fx = ft.TextField(label="f(x)=")
-        a = ft.TextField(col={"sm":3},label="a=")
-        b = ft.TextField(col={"sm":3},label="b=")
-        n = ft.TextField(col={"sm":3},label="n=")
+        fx = ft.TextField(label="f(x)=",value="x**2")
+        a = ft.TextField(col={"sm":3},label="a=",value="0")
+        b = ft.TextField(col={"sm":3},label="b=",value="2")
+        n = ft.TextField(col={"sm":3},label="h=",value="4")
         dropdown = ft.Dropdown(
             options=[
                 ft.DropdownOption(key="Trapezoid"),
                 ft.DropdownOption(key="Simpson 1/3"),
                 ft.DropdownOption(key="Simpson 3/8"),
-            ]
+            ],
+            value="Trapezoid"
         )
-        result = ft.Text("f'(x)=",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
+        result = ft.Text("Area Under Curve",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
         
         def calc(e):
             try:
@@ -289,8 +292,8 @@ class KOMNUMApp:
         )
 
     def __regresi_page(self):
-        x = ft.TextField(label="x=")
-        y = ft.TextField(label="y=")
+        x = ft.TextField(label="x=",value="1,2,3,4")
+        y = ft.TextField(label="y=",value="2,2,4,5")
         fig,ax = plt.subplots()
         
         def calc(e):
@@ -325,16 +328,17 @@ class KOMNUMApp:
         )
 
     def __differential_page(self):
-        fx = ft.TextField(label="f(x,y)=")
-        x0 = ft.TextField(col={"sm":3},label="x0=")
-        y0 = ft.TextField(col={"sm":3},label="y0=")
-        b  = ft.TextField(col={"sm":3},label="b=")
-        h  = ft.TextField(col={"sm":3},label="h=")
+        fx = ft.TextField(label="f(x,y)=",value="x+y")
+        x0 = ft.TextField(col={"sm":3},label="x0=",value="0")
+        y0 = ft.TextField(col={"sm":3},label="y0=",value="1")
+        b  = ft.TextField(col={"sm":3},label="b=",value="0.1")
+        h  = ft.TextField(col={"sm":3},label="h=",value="0.005")
         dropdown = ft.Dropdown(
             options=[
                 ft.DropdownOption(key="Euler"),
                 ft.DropdownOption(key="Heun"),
-            ]
+            ],
+            value="Euler"
         )
         result   = ft.Text("Hasil=",theme_style=ft.TextThemeStyle.HEADLINE_SMALL)
         
