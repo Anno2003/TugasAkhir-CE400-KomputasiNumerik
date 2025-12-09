@@ -1,6 +1,17 @@
 # Tugas Akhir CE-400 Komputasi Numerik
 Daya Sjahpoetro 622022003
 
+## Development
+create venv
+```
+py -m venv .venv
+.\.venv\Scripts\Activate
+```
+install poetry 
+```
+pip install poetry
+```
+
 ## Run the app
 
 ### Poetry
